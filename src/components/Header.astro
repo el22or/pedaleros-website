@@ -1,0 +1,12 @@
+---
+import Navigation from './Navigation.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import { SITE_NAME } from '../consts.ts';
+---
+<header class="header">
+  <div class="header__inner">
+    <div class="header__logo">{ SITE_NAME }</div>
+    <Navigation />
+    <LanguageSwitcher />
+  </div>
+</header>

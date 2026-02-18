@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import Page from '../../../layouts/Page.astro';
+
+export async function getStaticPaths() {
+  const tours = await getCollection('tours');
+  return tours.map(tour => {
+    const segments = tour.slug.split('/');
+    const lang = segments[0];
+    const mid = segments[1];
+    const slug = segments[segments.length - 1];
+
+    if (!lang || !mid || !slug) {
+      console.warn(`Invalid slug structure for tour: ${tour.slug}`);
+    }
+
+    return {
+      params: { lang, mid, slug },
+      props: { tour },
+    };
+  });
+}
+
+const { tour } = Astro.props;
+const { Content } = await tour.render();
+---
+
+<Page pageTitle={tour.data.title}>
+  <article class="tour-details">
+    <header class="tour-details__header">
+      <h1>{tour.data.title}</h1>
+      <p class="tour-details__subtitle">{tour.data.subtitle}</p>
+      <img src={tour.data.image.src} alt={tour.data.image.alt} />
+    </header>
+    
+    <div class="tour-details__meta">
+      <div><strong>Duration:</strong> {tour.data.duration}</div>
+      <div><strong>Location:</strong> {tour.data.location}</div>
+      <div><strong>Price:</strong> {tour.data.price}</div>
+      <div><strong>Difficulty:</strong> {tour.data.difficulty}</div>
+    </div>
+
+    <div class="tour-details__content">
+      <Content />
+    </div>
+  </article>
+</Page>

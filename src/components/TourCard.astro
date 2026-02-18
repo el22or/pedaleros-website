@@ -1,0 +1,31 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+type Tour = CollectionEntry<'tours'>['data'];
+
+interface Props extends Tour {
+  detailLink: string;
+}
+const props = Astro.props;
+---
+<article class="c-tour-card">
+  <div class="c-tour-card__header">
+    <div class="c-tour-card__image"><img class="c-tour-card__img" src={props.image.src} alt={props.image.alt} /></div>
+    <div class="c-tour-card__difficulty">{props.difficulty}</div>
+  </div>
+  <div class="c-tour-card__body">
+    <h2 class="c-tour-card__title">{props.title}</h2>
+    <h3 class="c-tour-card__subtitle">{props.subtitle}</h3>
+    <div class="c-tour-card__description">{props.description}</div>
+    <div class="c-tour-card__duration">{props.duration}</div>
+    <div class="c-tour-card__location">{props.location}</div>
+  </div>
+  <div class="c-tour-card__footer">
+    <div class="c-tour-card__footer-inner">
+      <div class="c-tour-card__price">{props.price}</div>
+      <div class="c-tour-card__actions">
+        <a class="c-tour-card__link" href={props.detailLink}>Details</a>
+      </div>
+    </div>
+  </div>
+</article>

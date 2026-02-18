@@ -1,0 +1,35 @@
+---
+import { GET_SAFE_LOCALE, SET_GLOBAL_LOCALE, GET_LANGUAGE_TAG } from '../i18n';
+import { SITE_NAME } from '../consts';
+import MainLayout from './MainLayout.astro';
+
+const { pathname } = Astro.url;
+const langPart = pathname.split('/')[1];
+const LOCALE = GET_SAFE_LOCALE(langPart);
+
+const {
+	pageTitle = `Default Title | ${SITE_NAME}`
+} = Astro.props;
+
+SET_GLOBAL_LOCALE(LOCALE);
+
+export interface Props {
+	pageTitle?: string;
+}
+---
+<!doctype html>
+<html lang={ GET_LANGUAGE_TAG() }>
+	<head>
+		<meta charset="UTF-8">
+		<title>{ pageTitle } | { SITE_NAME }</title>
+		<meta name="viewport" content="width=device-width">
+		<meta name="generator" content={Astro.generator}>
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+		<link rel="stylesheet" href="/assets/styles/styles.css">
+	</head>
+	<body>
+		<MainLayout>
+			<slot />
+		</MainLayout>
+	</body>
+</html>

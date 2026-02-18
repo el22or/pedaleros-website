@@ -1,0 +1,35 @@
+---
+import { LOCALES } from '../i18n';
+
+const { pathname } = Astro.url;
+const currentLocale = pathname.split('/')[1];
+---
+
+<nav class="language-switcher">
+  <ul>
+    {LOCALES.map((locale) => (
+      <li>
+        <a 
+          href={`/${locale}`} 
+          class={currentLocale === locale ? 'active' : ''}
+        >
+          {locale.toUpperCase()}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>
+
+<style>
+  .language-switcher ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    gap: 1rem;
+  }
+  .language-switcher a.active {
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+  }
+</style>

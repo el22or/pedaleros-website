@@ -1,0 +1,19 @@
+---
+const hasActions= Astro.slots.has('actions');
+---
+<span class:list={[
+  'navigation-item',
+  { 'navigation-item--has-actions': hasActions }
+]}>
+  <span class="navigation-item__icon">
+    <slot name="icon" />
+  </span>
+  <span class="navigation-item__text">
+    <slot />
+  </span>
+  {Astro.slots.has('actions') && (
+    <span class="navigation-item__actions">
+      <slot name="actions" />
+    </span>
+  )}
+</span>

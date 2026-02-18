@@ -1,0 +1,34 @@
+---
+import Page from '../../layouts/Page.astro';
+
+import { type CollectionEntry, getCollection } from 'astro:content';
+import { GET_SAFE_LOCALE, type Locale } from '../../i18n';
+import TourCard from '../../components/TourCard.astro';
+import PageWidth from '../../layouts/PageWidth.astro';
+
+type Tour = CollectionEntry<'tours'>;
+type TourData = CollectionEntry<'tours'>['data'];
+
+const lang = 'en';
+
+const tours = await getCollection('tours', (entry: Tour) => {
+  return entry.data.language === lang;
+});
+
+const sortedTours: Tour[] = tours.sort((a: Tour, b: Tour) => {
+  return b.data.publishDate.valueOf() - a.data.publishDate.valueOf();
+});
+---
+
+<Page pageTitle="Tours">
+  <PageWidth>
+    <div class="c-tours__list">
+      { sortedTours.map((tour) => (
+        <TourCard
+          {...tour.data}
+          detailLink={`/${tour.slug}`}
+        />
+      ))}
+    </div>
+  </PageWidth>
+</Page>

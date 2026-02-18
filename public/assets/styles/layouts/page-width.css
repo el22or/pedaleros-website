@@ -1,0 +1,7 @@
+.l-page-width {
+}
+
+.l-page-width__inner {
+  margin-inline: auto;
+  width: min(90%, calc(1200px - 40px));
+}

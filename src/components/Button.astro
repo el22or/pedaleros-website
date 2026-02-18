@@ -1,0 +1,17 @@
+---
+import { t } from '../i18n';
+
+interface Props {
+  labelKey: string;
+  type?: 'button';
+}
+
+const {
+  labelKey,
+  type = 'button'
+} = Astro.props;
+---
+
+<button type={ type }>
+  { t(labelKey) }
+</button>

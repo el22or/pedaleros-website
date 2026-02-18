@@ -1,0 +1,83 @@
+---
+import { GET_SAFE_LOCALE, NAV_STRUCTURE, t, type NavItem } from '../i18n';
+import NavigationItem from './NavigationItem.astro';
+
+const { pathname } = Astro.url;
+const segments = pathname.split('/');
+const currentLocale = GET_SAFE_LOCALE(segments[1]);
+
+const navItems = NAV_STRUCTURE[currentLocale] || [];
+
+const isActive = (path?: string) => {
+  if (!path) return false;
+  const normalizedPath = `/${currentLocale}/${path}`.replace(/\/+$/, '');
+  const normalizedPathname = pathname.replace(/\/+$/, '');
+  return normalizedPathname === normalizedPath;
+};
+
+const isParentActive = (item: NavItem) => {
+  if (item.path && isActive(item.path)) return true;
+  return item.children?.some((child: NavItem) => isActive(child.path));
+};
+---
+<nav class="navigation" aria-label="Main navigation" role="navigation">
+  <ul class="navigation__list" role="list" aria-label="Navigation list">
+    {navItems.map((item, index) => {
+      const parentActive = isParentActive(item);
+      return (
+        <li class="navigation__list-item" role="listitem" aria-label="Navigation list item">
+          {!item.path && item.children && item.children?.length > 0 && (
+            <button
+              class:list={["navigation__list-item-button", { "navigation__list-item-button--is-active": parentActive }]}
+              popovertargetaction="toggle"
+              popovertarget={`navigation__subnav--popover-${index}`}
+            >
+              <span class="navigation__list-item-button-text">{t(item.labelKey, currentLocale)}</span>
+              <span class="navigation__list-item-button-icon">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     stroke-linecap="round"
+                     stroke-linejoin="round"
+                     aria-hidden="true">
+                  <path d="m6 9 6 6 6-6"></path>
+                </svg>
+              </span>
+            </button>
+          )}
+
+          {item.path && !item.children && (
+            <a
+              class:list={["navigation__list-item-link", { "navigation__list-item-link--is-active": isActive(item.path) }]}
+              href={`/${currentLocale}/${item.path}`}
+              role="link"
+              aria-label={`Navigation link: ${item.labelKey}`}
+            >
+              {t(item.labelKey, currentLocale)}
+            </a>
+          )}
+
+          {item.children && item.children?.length > 0 && (
+            <div class="navigation__subnav" popover id={`navigation__subnav--popover-${index}`}>
+              <ul class="navigation__sublist" role="list">
+                {item.children.map((child) => (
+                  <li class="navigation__sublist-item" role="listitem">
+                    <a
+                      class:list={["navigation__link", { "navigation__link--is-active": isActive(child.path) }]}
+                      href={`/${currentLocale}/${child.path}`}
+                      role="link"
+                    >
+                      {t(child.labelKey, currentLocale)}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </li>
+      );
+    })}
+  </ul>
+</nav>

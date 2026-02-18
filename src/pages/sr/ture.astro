@@ -1,0 +1,29 @@
+---
+import Page from '../../layouts/Page.astro';
+
+import { type CollectionEntry, getCollection } from 'astro:content';
+import TourCard from '../../components/TourCard.astro';
+
+type Tour = CollectionEntry<'tours'>;
+
+const lang = 'sr';
+
+const tours = await getCollection('tours', (entry: Tour) => {
+  return entry.data.language === lang;
+});
+
+const sortedTours: Tour[] = tours.sort((a: Tour, b: Tour) => {
+  return b.data.publishDate.valueOf() - a.data.publishDate.valueOf();
+});
+---
+
+<Page pageTitle="Ture">
+  <div class="tours-list">
+    { sortedTours.map((tour) => (
+      <TourCard
+        {...tour.data}
+        detailLink={`/${tour.slug}`}
+      />
+    ))}
+  </div>
+</Page>

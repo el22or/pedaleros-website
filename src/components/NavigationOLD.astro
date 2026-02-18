@@ -1,0 +1,87 @@
+---
+import { GET_SAFE_LOCALE, NAV_STRUCTURE, t } from '../i18n';
+import NavigationItem from './NavigationItem.astro';
+
+const { pathname } = Astro.url;
+const segments = pathname.split('/');
+const currentLocale = GET_SAFE_LOCALE(segments[1]);
+
+const navItems = NAV_STRUCTURE[currentLocale] || [];
+---
+<nav class="navigation" aria-label="Main navigation" role="navigation">
+  <div class="navigation__button-wrapper">
+    <button
+      class="navigation__button"
+      aria-label="Menu"
+      title="Menu"
+      popovertargetaction="toggle"
+    >≡</button>
+  </div>
+  <div id="navigation__list-wrapper" class="navigation__list-wrapper">
+    <ul class="navigation__list" role="list" aria-label="Navigation list">
+      {navItems.map((item, index) => (
+        <li class="navigation__list-item" role="listitem" aria-label="Navigation list item">
+          <NavigationItem>
+            <img slot="icon" src="/assets/images/icon.svg" alt="Icon">
+            <a class="navigation__link" href={`/${currentLocale}/${item.path}`} role="link" aria-label=`Navigation link: ${item.labelKey}`>
+              {t(item.labelKey, currentLocale)}
+            </a>
+            {item.children && item.children?.length > 0 && (
+              <button slot="actions" popovertargetaction="toggle" popovertarget=`navigation__subnav--popover-${index}`>Action</button>
+            )}
+          </NavigationItem>
+
+          {item.children && item.children?.length > 0 && (
+            <div class="navigation__subnav" popover id=`navigation__subnav--popover-${index}`>
+              <ul class="navigation__sublist" role="list">
+                {item.children.map((child) => (
+                  <li class="navigation__sublist-item" role="listitem">
+                    <a class="navigation__link" href={`/${currentLocale}/${child.path}`} role="link">
+                      {t(child.labelKey, currentLocale)}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>
+
+<script>
+  const container = document.querySelector('.navigation');
+  const listWrapper = container?.querySelector('.navigation__list-wrapper');
+  const button = container?.querySelector('.navigation__button');
+  const POPOVER_ATTR: string = 'popover';
+  const POPOVERTARGET_ATTR: string = 'popovertarget';
+  const POPOVERTARGET_ID: string = 'navigation__list-wrapper';
+  const BREAKPOINT = 800;
+  let isSmall = false;
+
+  function handlePopover(_isSmall: boolean) {
+    isSmall = _isSmall;
+
+    if (_isSmall) {
+      if (!listWrapper?.hasAttribute(POPOVER_ATTR)) {
+        listWrapper?.setAttribute(POPOVER_ATTR, '');
+        button?.setAttribute(POPOVERTARGET_ATTR, POPOVERTARGET_ID);
+      }
+    } else {
+      listWrapper?.removeAttribute(POPOVER_ATTR);
+      button?.removeAttribute(POPOVERTARGET_ATTR);
+    }
+  }
+
+  const resizeObserver = new ResizeObserver(entries => {
+    for (let entry of entries) {
+      const width = entry.contentBoxSize?.[0]?.inlineSize ?? entry.contentRect.width;
+      handlePopover(width < BREAKPOINT);
+    }
+  });
+
+  if (container) {
+    resizeObserver.observe(container);
+  }
+</script>

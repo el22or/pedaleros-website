@@ -1,0 +1,43 @@
+.c-tour-card {
+  --c-tour-card-content-padding: 20px;
+  border-radius: 8px;
+  box-shadow:
+    rgb(0 0 0 / 0) 0 0 0 0,
+    rgb(0 0 0 / 0) 0 0 0 0,
+    rgb(0 0 0 / 0.1) 0 4px 6px -1px,
+    rgb(0 0 0 / 0.1) 0 2px 4px -2px;
+  overflow: hidden;
+  transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    box-shadow:
+      rgb(0 0 0 / 0) 0 0 0 0,
+      rgb(0 0 0 / 0) 0 0 0 0,
+      rgb(0 0 0 / 0.1) 0 20px 25px -5px,
+      rgb(0 0 0 / 0.1) 0 8px 10px -6px;
+  }
+}
+.c-tour-card__header {}
+.c-tour-card__image {}
+.c-tour-card__img {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  object-position: bottom 30% left 0;
+}
+.c-tour-card__difficulty {}
+.c-tour-card__body {
+  padding: var(--c-tour-card-content-padding);
+}
+.c-tour-card__title {}
+.c-tour-card__subtitle {}
+.c-tour-card__description {}
+.c-tour-card__duration {}
+
+.c-tour-card__footer {
+  padding-inline: var(--c-tour-card-content-padding);
+}
+
+.c-tour-card__footer-inner {
+  border-top: 1px solid red;
+  padding-block: var(--c-tour-card-content-padding);
+}

@@ -1,0 +1,22 @@
+.header {}
+
+.header__inner {
+  align-items: center;
+  display: grid;
+  column-gap: 20px;
+  grid-template-columns: repeat(16, 1fr);
+  margin-inline: auto;
+  width: min(90%, 1000px);
+}
+
+.header__logo {
+  grid-column: 1 / span 2;
+}
+
+.navigation {
+  grid-column: 3 / span 12;
+}
+
+.language-switcher {
+  grid-column: 15 / span 2;
+}
