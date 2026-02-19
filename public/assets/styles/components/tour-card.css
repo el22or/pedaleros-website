@@ -20,16 +20,31 @@
 .c-tour-card__header {}
 .c-tour-card__image {}
 .c-tour-card__img {
+  anchor-name: --anchor-name-tour-card-image;
   aspect-ratio: 16 / 9;
   object-fit: cover;
   object-position: bottom 30% left 0;
+  vertical-align: bottom;
 }
-.c-tour-card__difficulty {}
+.c-tour-card__difficulty {
+  --c-tour-card-difficulty-edge-distance: 20px;
+  --c-tour-card-right: calc(anchor(--anchor-name-tour-card-image right) + var(--c-tour-card-difficulty-edge-distance));
+  --c-tour-card-top: calc(anchor(--anchor-name-tour-card-image top) + var(--c-tour-card-difficulty-edge-distance));
+  background-color: #8d098d;
+  position: absolute;
+  position-anchor: --anchor-name-tour-card-image;
+  right: var(--c-tour-card-right);
+  top: var(--c-tour-card-top);
+}
 .c-tour-card__body {
   padding: var(--c-tour-card-content-padding);
 }
-.c-tour-card__title {}
-.c-tour-card__subtitle {}
+.c-tour-card__title {
+  margin: 0;
+}
+.c-tour-card__subtitle {
+  margin: 0;
+}
 .c-tour-card__description {}
 .c-tour-card__duration {}
 
